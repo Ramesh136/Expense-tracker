@@ -1,6 +1,7 @@
 const btn = document.getElementById("add-exp");
 const itemList = document.getElementById("expense-item");
-
+const total = document.querySelector('#total');
+var totalsum = 0 ;
 
 btn.addEventListener('click',addItem);
 itemList.addEventListener('click',removeItem)
@@ -26,7 +27,7 @@ function addItem(e){
     var deleteBtn = document.createElement('button');
   
     // Add classes to del button
-    deleteBtn.className = 'btn btn-danger btn-sm float-right delete m-2';
+    deleteBtn.className = 'btn btn-danger btn-sm float-end delete ms-2';
   
     // Append text node
     deleteBtn.appendChild(document.createTextNode('delete'));
@@ -40,7 +41,7 @@ function addItem(e){
     var editBtn = document.createElement('button');
   
     // Add classes to del button
-    editBtn.className = 'btn btn-danger btn-sm float-right edit';
+    editBtn.className = 'btn btn-danger btn-sm float-end edit';
   
     // Append text node
     editBtn.appendChild(document.createTextNode('edit'));
@@ -60,8 +61,11 @@ function addItem(e){
 
     let item = localStorage.getItem(amount.value );
     let obd = JSON.parse(item);
-    console.log(obd);
+    // console.log(obd);
     // Clear fields
+    totalsum += parseInt(amount.value) ;
+    total.value = totalsum;
+    console.log(totalsum);
     amount.value = '';
     desc.value = '';
   }
@@ -70,10 +74,13 @@ function addItem(e){
     if(e.target.classList.contains('delete')){
       if(confirm('Are You Sure?')){
         var li = e.target.parentElement;
-        console.log(li.firstChild);
+        // console.log(li.firstChild);
         var tt = li.firstChild.textContent.split(',')[1];
-        console.log(tt);
-  
+        // console.log(tt);
+        totalsum = totalsum-parseInt(li.firstChild.textContent.split(',')[0]);
+        console.log(totalsum);
+        total.value = totalsum;
+        
         localStorage.removeItem(tt);
         itemList.removeChild(li);
       }
@@ -84,11 +91,13 @@ function addItem(e){
         var li = e.target.parentElement;
         console.log(li.firstChild);
         var tt = li.firstChild.textContent.split(',')[1];
-        console.log(tt);
+        // console.log(tt);
   
         amount.value = li.firstChild.textContent.split(',')[0];
         desc.value = li.firstChild.textContent.split(',')[1];
-  
+        totalsum = totalsum-parseInt(amount.value);
+        console.log(totalsum);
+        total.value = totalsum;
         localStorage.removeItem(tt);
         itemList.removeChild(li);
   
